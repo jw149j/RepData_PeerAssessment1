@@ -82,10 +82,49 @@ print(stepStats['Mean'])
 ##  Mean 
 ## 10770
 ```
-The mean steps recorded per day is **10770**
+
+```r
+print(stepStats['Median'])
+```
+
+```
+## Median 
+##  10760
+```
+The mean steps recorded per day is **10770**   
+The median value is **10760**  
+
 
 ## What is the average daily activity pattern?
+The interval values are expressed as posixCt compliant objects with the same date for each.  
+Therefore aggregating on the interval values will extract data for each timepoint within a day  
 
+
+```r
+thruDay<-aggregate(steps~interval,data=rawData,FUN=mean)
+plot(thruDay,type="l")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+     
+The next task is to determine which interval has the highest mean steps associated  
+with it
+
+```r
+maxit<-thruDay[which.max(thruDay$steps),]
+print(maxit)
+```
+
+```
+##                interval    steps
+## 104 2000-01-01 08:35:00 206.1698
+```
+
+```r
+moo<-maxit$interval
+maxtime<-paste(hour(moo),minute(moo),sep=":")
+```
+The 5minute interval in which the maximum average number of steps was recorded is **8:35** with an average value of 206.2 .
 
 
 ## Imputing missing values

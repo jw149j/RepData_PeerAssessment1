@@ -37,7 +37,7 @@ parseTimeData<-function(timeStr){
     mn<-timeStr%%100
 # create a constant placeholder date
     interval<-dmy("1/1/2000")
-# append the hour and minute values to the fate object
+# append the hour and minute values to the date object
     hour(interval)<-hr
     minute(interval)<-mn
 # return
@@ -73,12 +73,31 @@ stepByDate<-aggregate(steps~date,data=rawData,FUN=sum)
 hist(stepByDate$steps,breaks=15,main="Steps per day")
 stepStats<-summary(stepByDate$steps)
 print(stepStats['Mean']) 
+print(stepStats['Median'])
 
 ```
-The mean steps recorded per day is **`r format(stepStats['Mean'])`**
+The mean steps recorded per day is **`r format(stepStats['Mean'])`**   
+The median value is **`r format(stepStats['Median'])`**  
+
 
 ## What is the average daily activity pattern?
+The interval values are expressed as posixCt compliant objects with the same date for each.  
+Therefore aggregating on the interval values will extract data for each timepoint within a day  
 
+```{r fig.height=6}
+thruDay<-aggregate(steps~interval,data=rawData,FUN=mean)
+plot(thruDay,type="l")
+```
+     
+The next task is to determine which interval has the highest mean steps associated  
+with it
+```{r}
+maxit<-thruDay[which.max(thruDay$steps),]
+print(maxit)
+moo<-maxit$interval
+maxtime<-paste(hour(moo),minute(moo),sep=":")
+```
+The 5minute interval in which the maximum average number of steps was recorded is **`r  maxtime`** with an average value of `r format(maxit$steps,digits=4)` .
 
 
 ## Imputing missing values
