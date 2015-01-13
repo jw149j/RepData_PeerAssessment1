@@ -1,9 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
@@ -13,7 +8,8 @@ Failing this the .zip file is called from a given url ***(http://d396qusza40orc.
 The file is extracted as required and the data read into the dataframe **rawData**.  
 The option cache = TRUE is used to ensure this process is performed only when necessary.
 
-```{r, cache=TRUE}
+
+```r
    if(file.exists("activity.csv")){
        rawData<-read.csv("activity.csv")
    } else if(file.exists("activity.zip")){
@@ -28,7 +24,8 @@ The option cache = TRUE is used to ensure this process is performed only when ne
 ```
 The time codes in this data set have no standard tokens to allow parsing of the hrs:mins data. The function **parseTimeData** performs this extraction, and creates a Posix conformant object with a placeholder date and the appropriate hr:min values. The utility of this step will be shown later. The function assumes that the package **lubridate** is available and loaded
 
-```{r}
+
+```r
 #  pass the numeric time code to the function
 parseTimeData<-function(timeStr){
 # use integer division to extract the hour value
@@ -68,14 +65,24 @@ The 'granularity' of the histogram is optimised by using 'breaks=15' as an optio
 The statistics associated with the distribution of total steps per day are determined  
 with the summary() function, mean and median values extracted as required
 
-```{r}
+
+```r
 stepByDate<-aggregate(steps~date,data=rawData,FUN=sum)
 hist(stepByDate$steps,breaks=15,main="Steps per day")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+
+```r
 stepStats<-summary(stepByDate$steps)
 print(stepStats['Mean']) 
+```
 
 ```
-The mean steps recorded per day is **`r format(stepStats['Mean'])`**
+##  Mean 
+## 10770
+```
+The mean steps recorded per day is **10770**
 
 ## What is the average daily activity pattern?
 
